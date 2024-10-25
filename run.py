@@ -12,8 +12,14 @@ SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('ovella_juices')
 
-sales = SHEET.worksheet('sales')
+def get_sales():
+    """
+    Get Daily sales data 
+    """
+print("Please enter the number of juices sold today")
+print("Data input shoud in sequence wise of Mango, Apple, Guava, Pome\n")
 
-data = sales.get_all_values()
+data_str = input("enter your daily sales here: ")
+print(f"The Sale are {data_str}")
 
-print(data)
+get_sales()

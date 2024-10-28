@@ -14,19 +14,22 @@ SHEET = GSPREAD_CLIENT.open('ovella_juices')
 
 def get_sales():
     """
-    Get Daily sales data 
+    Get daily sales data
     """
-    # Message display for user's input prompt    
-    print("Please enter the number of juices sold today")
-    print("Data input should be in sequence of Mango, Apple, Guava, Pomegranate\n")
+    while True:
+        # Message display for user's input prompt    
+        print("Please enter the number of juices sold today")
+        print("Data input should be in sequence of Mango, Apple, Guava, Pomegranate\n")
 
-    # User input daily sales
-    data_str = input("Enter your daily sales here: ")
+        # User input daily sales
+        data_str = input("Enter your daily sales here: ")
 
-    # Daily sales display in set i.e. "10", "5", "10", "20".
-    sales_data = data_str.split(",")
-    validate_data(sales_data)
-
+        # Daily sales display in set i.e. "10", "5", "10", "20".
+        sales_data = data_str.split(",")
+        
+        if validate_data(sales_data):
+            print("Data is valid!")
+            break
 
 def validate_data(values):
     """ 
@@ -34,12 +37,11 @@ def validate_data(values):
     raises ValueError if the input length isn't 4 or contains non-numeric values.
     """
     try:
+        # Check if all values are integers
         [int(value) for value in values]
+        
         if len(values) != 4:
             raise ValueError(f"Exactly 4 values required, you provided {len(values)}")
-        
-        # Check if all values are integers
-        [int(value) for value in values]  # This will raise ValueError if a value is not an integer
         
     except ValueError as e:
         print(f"Invalid data: {e}, please enter the correct format.\n")

@@ -29,7 +29,7 @@ def get_sales():
         
         if validate_data(sales_data):
             print("Data is valid!")
-            break
+            return sales_data  # Return the sales data when valid
 
 def validate_data(values):
     """ 
@@ -48,4 +48,18 @@ def validate_data(values):
         return False  # Indicate invalid data
     return True  # Data is valid
 
-get_sales()
+# This section will update sales on the sales Google worksheet
+
+def update_sales_worksheet(data):
+    """
+    Update sales worksheet, add new data on new rows with list data.
+    """
+    print("Updating sales worksheet... \n")
+    sales_worksheet = SHEET.worksheet("sales")
+    sales_worksheet.append_row(data)
+    print("Sales worksheet updated.\n")
+
+# Main program flow
+data = get_sales()  # get_sales now returns sales data when valid
+sales_data = [int(num) for num in data]  # Convert each entry to an integer
+update_sales_worksheet(sales_data)

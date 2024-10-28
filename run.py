@@ -5,7 +5,7 @@ SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive.file",
     "https://www.googleapis.com/auth/drive"
-    ]
+]
 
 CREDS = Credentials.from_service_account_file('creds.json')
 SCOPED_CREDS = CREDS.with_scopes(SCOPE)
@@ -16,31 +16,34 @@ def get_sales():
     """
     Get Daily sales data 
     """
-# message display for user's input prompt    
-print("Please enter the number of juices sold today")
-print("Data input shoud in sequence wise of Mango, Apple, Guava, Pome\n")
+    # Message display for user's input prompt    
+    print("Please enter the number of juices sold today")
+    print("Data input should be in sequence of Mango, Apple, Guava, Pomegranate\n")
 
-# user input daily sales
-data_str = input("enter your daily sales here: ")
+    # User input daily sales
+    data_str = input("Enter your daily sales here: ")
 
-# daily sales display in set i.e "10", "5", "10", "20".
-sales_data = data_str.split(",")
-validate_data(sales_data)
+    # Daily sales display in set i.e. "10", "5", "10", "20".
+    sales_data = data_str.split(",")
+    validate_data(sales_data)
 
 
 def validate_data(values):
     """ 
-    checks Input value can be converted into integers,
-    if not then raises ValueError 
-    or the volume of value isn't in set of 4. 
+    Checks if input values can be converted into integers,
+    raises ValueError if the input length isn't 4 or contains non-numeric values.
     """
     try:
-    if len(values) != 4:
-        raise ValueError(
-            f"Exactly 4 values required, you provided {len(values)}"
-             )
-             except ValueError as e:
-    print(f"Invaid data: {e}, please enter the correct format.\n")
+        [int(value) for value in values]
+        if len(values) != 4:
+            raise ValueError(f"Exactly 4 values required, you provided {len(values)}")
+        
+        # Check if all values are integers
+        [int(value) for value in values]  # This will raise ValueError if a value is not an integer
+        
+    except ValueError as e:
+        print(f"Invalid data: {e}, please enter the correct format.\n")
+        return False  # Indicate invalid data
+    return True  # Data is valid
 
 get_sales()
- 

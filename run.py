@@ -70,7 +70,17 @@ def calculate_wastage_data(sales_row):
     print("Calculating wastage data...\n")
     production = SHEET.worksheet("production").get_all_values()
     production_row = production[-1]
-    print(production)
+    print(production_row)
+
+    wastage_data = []
+    for production, sales in zip(production_row,sales_row):
+        wastage = int(production) - sales
+        wastage_data.append(wastage)
+    print(wastage_data)    
+
+
+
+
 
 # Main program flow
 def main():
@@ -81,6 +91,8 @@ def main():
     sales_data = [int(num) for num in data]  # Convert each entry to an integer
     update_sales_worksheet(sales_data)
     calculate_wastage_data(sales_data)
+    new_wastage_data = calculate_wastage_data(sales_data)
+    print(new_wastage_data)
 
 print("Welcome to the Daily Record for Ovella Juice Program")
 main()

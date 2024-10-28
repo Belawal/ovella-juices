@@ -1,5 +1,6 @@
 import gspread
 from google.oauth2.service_account import Credentials
+from pprint import pprint
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -41,7 +42,9 @@ def validate_data(values):
         [int(value) for value in values]
         
         if len(values) != 4:
-            raise ValueError(f"Exactly 4 values required, you provided {len(values)}")
+            raise ValueError(
+                f"Exactly 4 values required, you provided {len(values)}"
+            )
         
     except ValueError as e:
         print(f"Invalid data: {e}, please enter the correct format.\n")
@@ -59,7 +62,25 @@ def update_sales_worksheet(data):
     sales_worksheet.append_row(data)
     print("Sales worksheet updated.\n")
 
+def calculate_wastage_data(sales_row):
+    """
+    Calculate total waste products by 
+    production - sale = wastage of product.
+    """
+    print("Calculating wastage data...\n")
+    production = SHEET.worksheet("production").get_all_values()
+    production_row = production[-1]
+    print(production)
+
 # Main program flow
-data = get_sales()  # get_sales now returns sales data when valid
-sales_data = [int(num) for num in data]  # Convert each entry to an integer
-update_sales_worksheet(sales_data)
+def main():
+    """
+    Run all program functions
+    """
+    data = get_sales()  # get_sales now returns sales data when valid
+    sales_data = [int(num) for num in data]  # Convert each entry to an integer
+    update_sales_worksheet(sales_data)
+    calculate_wastage_data(sales_data)
+
+print("Welcome to the Daily Record for Ovella Juice Program")
+main()

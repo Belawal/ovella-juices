@@ -1,6 +1,6 @@
 import gspread
 from google.oauth2.service_account import Credentials
-from pprint import pprint
+
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -21,7 +21,7 @@ def get_sales():
         print("Please enter the number of juices sold today")
         print("Data input should be in sequence of Mango, Apple, Guava, Pomegranate\n")
 
-        data_str = input("Enter your daily sales here: ")
+        data_str = input("Enter your daily sales here:\n ")
         sales_data = data_str.split(",")
         
         if validate_data(sales_data):
@@ -72,29 +72,31 @@ def calculate_wastage_data(sales_row):
 
 def get_last_5_entries_sales():
     """
-    collect date from collums of sheet and returns it as list
+    Collect last 5 entries from each column in the 'sales' sheet and return them as a list.
     """    
     sales = SHEET.worksheet("sales")
-
     columns = []
 
     for ind in range(1, 5):
+        column = sales.col_values(ind)
+        columns.append(column[-5:])  # Collect last 5 entries from each column
 
-        column = sales.col_value(ind)
-        columns.append(column[-5:])
-
-    return column
-
+    return columns
 
 def main():
     """
     Run all program functions
     """
     data = get_sales()
-    sales_data = [int(num) for num in data]
+    sales_data = [int(num) for num in data]  # Ensure sales data is a list of integers
     update_worksheet(sales_data, "sales")
     wastage_data = calculate_wastage_data(sales_data)
     update_worksheet(wastage_data, "wastage")
+
+    # Optionally, retrieve and print the last 5 sales entries
+    last_5_entries = get_last_5_entries_sales()
+    print("Last 5 entries in each sales column:")
+    pprint(last_5_entries)
 
 print("Welcome to the Daily Record for Ovella Juice Program")
 main()

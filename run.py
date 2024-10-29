@@ -62,6 +62,15 @@ def update_sales_worksheet(data):
     sales_worksheet.append_row(data)
     print("Sales worksheet updated.\n")
 
+def update_wastage_worksheet(data):
+    """
+    Update wastage worksheet, add new data on new rows with list data.
+    """
+    print("Updating wastage worksheet... \n")
+    wastage_worksheet = SHEET.worksheet("wastage")
+    wastage_worksheet.append_row(data)
+    print("wastage worksheet updated.\n")    
+
 def calculate_wastage_data(sales_row):
     """
     Calculate total waste products by 
@@ -92,7 +101,7 @@ def main():
     update_sales_worksheet(sales_data)
     calculate_wastage_data(sales_data)
     new_wastage_data = calculate_wastage_data(sales_data)
-    print(new_wastage_data)
+    update_wastage_worksheet(new_wastage_data)
 
 print("Welcome to the Daily Record for Ovella Juice Program")
 main()

@@ -70,6 +70,22 @@ def calculate_wastage_data(sales_row):
     print("Wastage data calculated:", wastage_data)
     return wastage_data
 
+def get_last_5_entries_sales():
+    """
+    collect date from collums of sheet and returns it as list
+    """    
+    sales = SHEET.worksheet("sales")
+
+    columns = []
+
+    for ind in range(1, 5):
+
+        column = sales.col_value(ind)
+        columns.append(column[-5:])
+
+    return column
+
+
 def main():
     """
     Run all program functions

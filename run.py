@@ -96,7 +96,7 @@ def main():
     # Optionally, retrieve and print the last 5 sales entries
     last_5_entries = get_last_5_entries_sales()
     print("Last 5 entries in each sales column:")
-    pprint(last_5_entries)
+    print(last_5_entries)
 
 print("Welcome to the Daily Record for Ovella Juice Program")
 main()

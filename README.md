@@ -1,5 +1,5 @@
 <h1>Ovella Juice Inventory Manager</h1>
-
+<img src="/assets/readmeimage.png">
 <h2>Introduction</h2>
 Ovella Juice Inventory Manager is an easy-to-use program that helps small business owners keep track of their juice production, sales, and wastage on a daily basis.
 It records data for Mango, Apple, Guava, and Pomegranate juices. 

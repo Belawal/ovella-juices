@@ -80,7 +80,7 @@ def get_last_5_entries_sales():
     for ind in range(1, 5):
         column = sales.col_values(ind)
         columns.append(column[-5:])  # Collect last 5 entries from each column
-
+   
     return columns
 
 def main():
@@ -94,9 +94,14 @@ def main():
     update_worksheet(wastage_data, "wastage")
 
     # Optionally, retrieve and print the last 5 sales entries
-    last_5_entries = get_last_5_entries_sales()
+    columns = get_last_5_entries_sales()
     print("Last 5 entries in each sales column:")
-    print(last_5_entries)
+    print("Mango | Apple | Guava | Pome |\n"
+            f"{columns[0][0]}    |  {columns[0][1]}    |  {columns[0][2]}    |  {columns[0][3]}    |\n"
+            f"{columns[1][0]}    |  {columns[1][1]}    |  {columns[1][2]}    |  {columns[1][3]}    |\n"
+            f"{columns[2][0]}    |  {columns[2][1]}    |  {columns[2][2]}    |  {columns[2][3]}    |\n"
+            f"{columns[3][0]}    |  {columns[3][1]}    |  {columns[3][2]}    |  {columns[3][3]}    |\n"
+            )
 
 print("Welcome to the Daily Record for Ovella Juice Program")
 main()

@@ -24,21 +24,27 @@
             transports: ['websocket']
         });
 
+        let commandBuffer = '';
+
+        function printPrompt() {
+            term.write('\r\n> ');
+        }
+
         socket.on('connect', () => {
             term.writeln(' Connected to server');
+            printPrompt();
         });
 
         socket.on('console_output', (msg) => {
-            term.writeln(msg);
+            // Write output from server, then print a prompt for new input
+            term.writeln('\r\n' + msg);
+            printPrompt();
         });
-
-      let commandBuffer = '';
 
         term.onData(data => {
             if (data === '\r') {  // Enter key pressed
                 socket.emit('command_entered', commandBuffer);
                 commandBuffer = '';
-                term.write('\r\n');
             } else if (data === '\u007F') {  // Backspace key
                 if (commandBuffer.length > 0) {
                     commandBuffer = commandBuffer.slice(0, -1);
@@ -50,9 +56,8 @@
             }
         });
 
-
         socket.on('disconnect', () => {
-            term.writeln(' Disconnected from server');
+            term.writeln('\r\n Disconnected from server');
         });
     </script>
 </body>

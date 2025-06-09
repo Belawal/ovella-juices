@@ -56,9 +56,8 @@ io.on('connection', (socket) => {
                 socket.emit("console_output", message);
             });
 
-            pyshell.on('close', (code, signal) => {
-                console.log(` Python process ended with code ${code}, signal ${signal}`);
-                socket.emit("console_output", "\r\nProcess ended.\r\nPlease click the 'Run Program' button to restart.");
+            pyshell.on('close', () => {
+                console.log(' Python process ended');
             });
 
             pyshell.on('error', (error) => {

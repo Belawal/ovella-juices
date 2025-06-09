@@ -1,5 +1,5 @@
 <h1>Ovella Juice Inventory Manager</h1>
-<img src="/assets/readmeimage.png">
+<img src="/assets/readmeimage.jpg">
 <h2>Introduction</h2>
 Ovella Juice Inventory Manager is an easy-to-use program that helps small business owners keep track of their juice production, sales, and wastage on a daily basis.
 It records data for Mango, Apple, Guava, and Pomegranate juices. 
@@ -17,6 +17,24 @@ Data Check: The program checks your entries to make sure they’re numbers and t
 Google Sheets Connection: Your data will be saved to a Google Sheet where it’s easy to view.
 Wastage Calculation: After you enter sales and production data, the program will calculate wastage and save it in the Google Sheet.
 
+<h2>Flowchart</h2>
+![Flowchart]<img src="/assets/flowchart_PP3.jpg">
+
+The Ovella Juice sales tracking program follows this structured workflow:
+
+User Input
+-Collects comma-separated sales data for 4 juice flavors (Mango, Apple, Guava, Pomegranate).
+
+Validation
+-Ensures input has exactly 4 integers. Loops until valid.
+
+Google Sheets Updates
+-Writes validated sales to the "sales" worksheet.
+-Calculates wastage (Production - Sales) and updates "wastage" worksheet.
+
+Output
+-Displays the last 5 sales entries for review.
+
 <h2>Tools Used</h2>
 Python: The main programming language used.
 Google Sheets API: Used to save and view data in Google Sheets.
@@ -27,7 +45,7 @@ Google OAuth2: Keeps your data secure by allowing safe access to Google Sheets.
 This project was inspired by the Love Sandwiches project, which provided a helpful framework for organizing data and checking that entries are correct. 
 Adapting its design to Ovella Juice Inventory Manager made it easier to set up daily records for juices.
 
-How to Set It Up
+<h2>>How to Set It Up</h2>
 Install Tools:
 
 pip install gspread google-auth

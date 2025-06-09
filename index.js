@@ -27,7 +27,7 @@ const io = require('socket.io')(server, {
 });
 
 io.on('connection', (socket) => {
-    console.log("✅ Socket connected");
+    console.log(" Socket connected");
 
     function run_python_script() {
         try {
@@ -56,8 +56,9 @@ io.on('connection', (socket) => {
                 socket.emit("console_output", message);
             });
 
-            pyshell.on('close', () => {
-                console.log('🔚 Python process ended');
+            pyshell.on('close', (code, signal) => {
+                console.log(` Python process ended with code ${code}, signal ${signal}`);
+                socket.emit("console_output", "\r\nProcess ended.\r\nPlease click the 'Run Program' button to restart.");
             });
 
             pyshell.on('error', (error) => {

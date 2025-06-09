@@ -27,7 +27,7 @@
         let commandBuffer = '';
 
         function printPrompt() {
-            term.write('\r\n> ');
+            term.write('\n> ');
         }
 
         socket.on('connect', () => {
@@ -36,12 +36,12 @@
         });
 
         socket.on('console_output', (msg) => {
-            term.writeln('\r\n' + msg);
+            term.writeln('\n' + msg);
             printPrompt();
         });
 
         term.onData(data => {
-            if (data === '\r') {  // Enter key pressed
+            if (data === '') {  // Enter key pressed
                 socket.emit('command_entered', commandBuffer);
                 commandBuffer = '';
             } else if (data === '\u007F') {  // Backspace key
@@ -56,7 +56,7 @@
         });
 
         socket.on('disconnect', () => {
-            term.writeln('\r\n Disconnected from server');
+            term.writeln('\n Disconnected from server');
             term.writeln('Please click the Run Program button to restart.');
         });
     </script>

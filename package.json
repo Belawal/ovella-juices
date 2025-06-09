@@ -19,7 +19,9 @@
     "node-pty": "^0.10.1",
     "node-static": "^0.7.11",
     "python-shell": "^5.0.0",
-    "socket.io": "^4.8.1",
-    "total4": "^0.0.45"
+      "socket.io": "^4.8.1"
+  },
+  "engines": {
+    "node": "20.x"
   }
 }

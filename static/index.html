@@ -32,9 +32,24 @@
             term.writeln(msg);
         });
 
+      let commandBuffer = '';
+
         term.onData(data => {
-            socket.emit('command_entered', data);
+            if (data === '\r') {  // Enter key pressed
+                socket.emit('command_entered', commandBuffer);
+                commandBuffer = '';
+                term.write('\r\n');
+            } else if (data === '\u007F') {  // Backspace key
+                if (commandBuffer.length > 0) {
+                    commandBuffer = commandBuffer.slice(0, -1);
+                    term.write('\b \b');
+                }
+            } else {
+                commandBuffer += data;
+                term.write(data);
+            }
         });
+
 
         socket.on('disconnect', () => {
             term.writeln(' Disconnected from server');

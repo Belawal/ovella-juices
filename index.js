@@ -79,6 +79,5 @@ io.on('connection', (socket) => {
         run_python_script();
     }
 });
-
 console.log('Starting node on port', process.env.PORT);
 server.listen(process.env.PORT);

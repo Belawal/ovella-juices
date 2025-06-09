@@ -36,7 +36,6 @@
         });
 
         socket.on('console_output', (msg) => {
-            // Write output from server, then print a prompt for new input
             term.writeln('\r\n' + msg);
             printPrompt();
         });
@@ -58,6 +57,7 @@
 
         socket.on('disconnect', () => {
             term.writeln('\r\n Disconnected from server');
+            term.writeln('Please click the Run Program button to restart.');
         });
     </script>
 </body>

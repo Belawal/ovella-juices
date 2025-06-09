@@ -79,5 +79,7 @@ io.on('connection', (socket) => {
         run_python_script();
     }
 });
-console.log('Starting node on port', process.env.PORT);
-server.listen(process.env.PORT);
+const port = process.env.PORT || 8000;
+server.listen(port, () => {
+  console.log('Server running on port', port);
+});

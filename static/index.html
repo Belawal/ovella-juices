@@ -3,38 +3,43 @@
 <head>
     <link rel="stylesheet" href="xterm.css" />
     <script src="xterm.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"
-        integrity="sha512-aMGMvNYu8Ue4G+fHa359jcPb1u+ytAF+P2SCb+PxrjCdO3n3ZTxJ30zuH39rimUggmTwmh2u7wvQsDTHESnmfQ=="
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.min.js"
+        integrity="sha512-3zSAlxFGrOfpFUVayhrxS5D61YlyYiGy5+J1Zyl64ZC1vRh02q0FzoIboWVgkXWgRFMNoRPDUVx63xIStt1n1w=="
         crossorigin="anonymous"></script>
-
     <title>Python Terminal</title>
 </head>
 <body>
     <button onclick="window.location.reload()">Run Program</button>
-    <div id="terminal"></div>
+    <div id="terminal" style="padding: 10px;"></div>
 
     <script>
-        var term = new Terminal({
+        const term = new Terminal({
             cols: 80,
-            rows: 24
+            rows: 24,
+            cursorBlink: true
         });
         term.open(document.getElementById('terminal'));
-        term.writeln('Running startup command: python3 run.py');
-        term.writeln('');
+        term.writeln('Connecting to server...');
 
-        var ws = new WebSocket(location.protocol.replace('http', 'ws') + '//' + location.hostname + (location.port ? (
-            ':' + location.port) : '') + '/');
+        const socket = io("https://ovella-juices-pp3-19c88964a8ee.herokuapp.com", {
+            transports: ['websocket']
+        });
 
-        ws.onopen = function () {
-            new attach.attach(term, ws);
-        };
+        socket.on('connect', () => {
+            term.writeln(' Connected to server');
+        });
 
-        ws.onerror = function (e) {
-            console.log(e);
-        };
-        // Set focus in the terminal
-        document.getElementsByClassName("xterm-helper-textarea")[0].focus();
+        socket.on('console_output', (msg) => {
+            term.writeln(msg);
+        });
+
+        term.onData(data => {
+            socket.emit('command_entered', data);
+        });
+
+        socket.on('disconnect', () => {
+            term.writeln(' Disconnected from server');
+        });
     </script>
 </body>
 </html>

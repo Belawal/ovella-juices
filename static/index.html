@@ -4,7 +4,9 @@
     <link rel="stylesheet" href="xterm.css" />
     <script src="xterm.js"></script>
 
+    <!-- Fixed socket.io CDN: removed integrity to avoid mismatch -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.min.js"></script>
+
     <title>Python Terminal</title>
 </head>
 <body>
@@ -32,22 +34,8 @@
             term.writeln(msg);
         });
 
-        let commandBuffer = '';
-
         term.onData(data => {
-            if (data === '\r') {  // Enter key pressed
-                socket.emit('command_entered', commandBuffer);
-                commandBuffer = '';
-                term.write('\n');
-            } else if (data === '\u007F') {  // Backspace key
-                if (commandBuffer.length > 0) {
-                    commandBuffer = commandBuffer.slice(0, -1);
-                    term.write('\b \b');
-                }
-            } else {
-                commandBuffer += data;
-                term.write(data);
-            }
+            socket.emit('command_entered', data);
         });
 
         socket.on('disconnect', () => {

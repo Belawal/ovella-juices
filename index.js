@@ -1,81 +1,79 @@
-const { PythonShell } = require('python-shell');
+const PythonShell = require('python-shell').PythonShell;
 const static = require('node-static');
 const http = require('http');
 const fs = require('fs');
 
-// Serve static files from ./static
+// Serve files from ./static directory
 const static_serve = new static.Server('./static');
 
 // Create HTTP server
 const server = http.createServer(function (req, res) {
-    console.log(`Received request: ${req.method} ${req.url}`);
     static_serve.serve(req, res, function (err, result) {
         if (err) {
-            console.error('Error serving file:', err);
-            res.writeHead(err.status || 500, { 'Content-Type': 'text/plain' });
+            res.writeHead(err.status || 500, {'Content-Type': 'text/plain'});
             res.end(err.message || 'Internal Server Error');
         }
     });
 });
 
-// Setup socket.io with the server (force WebSocket)
-const io = require('socket.io')(server, {
+// Setup socket.io with the server
+const { Server } = require('socket.io');
+const io = new Server(server, {
     cors: {
-        origin: "*", // Optional: Set to your domain for production
+        origin: "*", 
+        methods: ["GET", "POST"]
     },
-    transports: ['websocket'], // Force WebSocket only (no polling)
+    transports: ['websocket'] 
 });
 
 io.on('connection', (socket) => {
-    console.log(" Socket connected");
+    console.log("Socket Connected");
 
     function run_python_script() {
         try {
-            const pyshell = new PythonShell('run.py');
+            let pyshell = new PythonShell('run.py');
 
-            socket.on('disconnect', () => {
-                console.log(" Socket disconnected");
+            socket.on('disconnect', () =>  {
+                console.log("Socket Disconnected");
                 try {
                     pyshell.kill();
                 } catch (e) {
-                    console.log('Error killing Python shell:', e);
+                    console.log('Error killing pyshell:', e);
                 }
             });
 
-            socket.on('command_entered', (command) => {
-                console.log(" Command received:", command);
+            socket.on('command_entered', (command) =>  {
+                console.log("Socket Command:", command);
                 try {
                     pyshell.send(command);
                 } catch (e) {
-                    console.log('Error sending to Python shell:', e);
+                    console.log('Error sending to pyshell:', e);
                 }
             });
 
             pyshell.on('message', (message) => {
-                console.log(' Python Output:', message);
+                console.log('Process output:', message);
                 socket.emit("console_output", message);
             });
 
-            pyshell.on('close', (code, signal) => {
-                console.log(` Python process ended with code ${code}, signal ${signal}`);
-                socket.emit("console_output", "\r\nProcess ended.\r\nPlease click the 'Run Program' button to restart.");
+            pyshell.on('close', () => {
+                console.log('Process ended');
             });
 
-            pyshell.on('error', (error) => {
-                console.log(' Python error:', error);
-                socket.emit("console_output", `Error: ${error}`);
+            pyshell.on('error', (err) => {
+                console.log('Process error:', err);
+                socket.emit("console_output", "Error: " + err.toString());
             });
         } catch (e) {
-            console.error(" Exception starting Python script:", e);
+            console.error("Exception running python script:", e);
         }
     }
 
-    // Optional: Save credentials if provided via ENV
     if (process.env.CREDS != null) {
-        fs.writeFile('creds.json', process.env.CREDS, 'utf8', function (err) {
+        fs.writeFile('creds.json', process.env.CREDS, 'utf8', function(err) {
             if (err) {
-                console.log('Error writing creds:', err);
-                socket.emit("console_output", "Error saving credentials.");
+                console.log('Error writing creds file:', err);
+                socket.emit("console_output", "Error saving credentials: " + err);
             } else {
                 run_python_script();
             }
@@ -85,8 +83,7 @@ io.on('connection', (socket) => {
     }
 });
 
-// Start server on assigned port
 const port = process.env.PORT || 8000;
 server.listen(port, () => {
-    console.log(` Server listening on port ${port}`);
+    console.log(`Server listening on port ${port}`);
 });

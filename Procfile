@@ -1,1 +1,1 @@
-web: node index.js
+worker: python3 run.py
